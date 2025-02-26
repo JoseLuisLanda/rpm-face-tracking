@@ -6,9 +6,11 @@ import { useDropzone } from 'react-dropzone';
 import Avatar from './Avatar';
 import { FaceTrackingProvider, useTracking } from './context/FaceTrackingContext';
 import { BackgroundProvider, useBackground } from './context/BackgroundContext';
+import { AvatarProvider } from './context/AvatarContext';
 import VideoPreview from './components/FaceTracking/VideoPreview';
 import BackgroundControls from './components/Background/BackgroundControls';
 import ActionButtons from './components/UI/ActionButtons';
+import AppLayout from './components/Layout/AppLayout';
 
 function AppContent() {
   const { isTracking } = useTracking();
@@ -94,7 +96,9 @@ function App() {
   return (
     <FaceTrackingProvider>
       <BackgroundProvider>
-        <AppContent />
+        <AvatarProvider>
+          <AppLayout />
+        </AvatarProvider>
       </BackgroundProvider>
     </FaceTrackingProvider>
   );

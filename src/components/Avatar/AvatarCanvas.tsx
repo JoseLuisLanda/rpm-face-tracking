@@ -2,12 +2,11 @@ import React from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Color } from 'three';
 import Avatar from '../../Avatar';
+import { useAvatar } from '../../context/AvatarContext';
 
-interface AvatarCanvasProps {
-  url: string;
-}
-
-const AvatarCanvas: React.FC<AvatarCanvasProps> = ({ url }) => {
+const AvatarCanvas: React.FC = () => {
+  const { url } = useAvatar();
+  
   return (
     <div className="canvas-container">
       <Canvas camera={{ fov: 25 }} shadows>
