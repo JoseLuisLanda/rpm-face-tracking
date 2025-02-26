@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense, lazy } from 'react';
 import './App.css';
 import { Color } from 'three';
 import { Canvas } from '@react-three/fiber';
@@ -10,7 +10,9 @@ import { AvatarProvider } from './context/AvatarContext';
 import VideoPreview from './components/FaceTracking/VideoPreview';
 import BackgroundControls from './components/Background/BackgroundControls';
 import ActionButtons from './components/UI/ActionButtons';
-import AppLayout from './components/Layout/AppLayout';
+
+// Lazy load components
+const AppLayout = lazy(() => import('./components/Layout/AppLayout'));
 
 function AppContent() {
   const { isTracking } = useTracking();
@@ -97,7 +99,9 @@ function App() {
     <FaceTrackingProvider>
       <BackgroundProvider>
         <AvatarProvider>
-          <AppLayout />
+          <Suspense fallback={<div>Loading...</div>}>
+            <AppLayout />
+          </Suspense>
         </AvatarProvider>
       </BackgroundProvider>
     </FaceTrackingProvider>
