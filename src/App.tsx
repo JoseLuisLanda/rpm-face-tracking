@@ -1,29 +1,39 @@
-import React, { useState, Suspense, lazy } from 'react';
+import React, { useState } from 'react';
 import './App.css';
-import { Color } from 'three';
 import { Canvas } from '@react-three/fiber';
 import { useDropzone } from 'react-dropzone';
-import Avatar from './Avatar';
-import { FaceTrackingProvider, useTracking } from './context/FaceTrackingContext';
-import { BackgroundProvider, useBackground } from './context/BackgroundContext';
-import { AvatarProvider } from './context/AvatarContext';
-import VideoPreview from './components/FaceTracking/VideoPreview';
-import BackgroundControls from './components/Background/BackgroundControls';
 import ActionButtons from './components/UI/ActionButtons';
-
-// Lazy load components
-const AppLayout = lazy(() => import('./components/Layout/AppLayout'));
+import BackgroundControls from './components/Background/BackgroundControls';
+import AvatarSelector, { AvatarObject } from './components/Avatar/AvatarSelector';
+import VideoPreview from './components/FaceTracking/VideoPreview';
+import Avatar from './Avatar'; // Tu componente de avatar
+import { FaceTrackingProvider } from './context/FaceTrackingContext';
+import { BackgroundProvider } from './context/BackgroundContext';
+import { AvatarProvider } from './context/AvatarContext';
+import CollapsiblePanel from './components/UI/CollapsiblePanel';
 
 function AppContent() {
-  const { isTracking } = useTracking();
-  const { handleBackgroundChange } = useBackground();
-  
-  const [url, setUrl] = useState<string>("https://models.readyplayer.me/67be99147e1ad1bd7ca8d376.glb?morphTargets=ARKit&textureAtlas=1024");
+  // Lista de avatares disponibles (puedes usar rutas absolutas para las miniaturas)
+  const availableAvatars: AvatarObject[] = [
+    { 
+      url: "https://models.readyplayer.me/67be99147e1ad1bd7ca8d376.glb", 
+      thumbnail: "https://models.readyplayer.me/67be99147e1ad1bd7ca8d376.png", 
+      name: "JLJL" 
+    },
+    { 
+      url: "https://models.readyplayer.me/67c5303fc2f17c5ef5c43794.glb", 
+      thumbnail: "https://models.readyplayer.me/67c5303fc2f17c5ef5c43794.png", 
+      name: "ELLA" 
+    }
+  ];
+
+  // Estado para URL del avatar, visibilidad de paneles, etc.
+  const [url, setUrl] = useState<string>(`${availableAvatars[0].url}?morphTargets=ARKit&textureAtlas=1024`);
   const [isModelLoaded, setIsModelLoaded] = useState<boolean>(false);
   const [isCollapsibleVisible, setIsCollapsibleVisible] = useState<boolean>(false);
   const [isLeftCollapsibleVisible, setIsLeftCollapsibleVisible] = useState<boolean>(false);
-  
-  // Configuración del dropzone para el avatar
+  const [isAvatarSelectorVisible, setIsAvatarSelectorVisible] = useState<boolean>(false);
+
   const { getRootProps } = useDropzone({
     onDrop: files => {
       const file = files[0];
@@ -40,7 +50,13 @@ function AppContent() {
     const newUrl = `${event.target.value}?morphTargets=ARKit&textureAtlas=1024`;
     setUrl(newUrl);
     setIsModelLoaded(true);
-  }
+  };
+
+  const handleSelectAvatar = (newUrl: string) => {
+    newUrl = `${newUrl}?morphTargets=ARKit&textureAtlas=1024`;
+    setUrl(newUrl);
+    setIsModelLoaded(true);
+  };
 
   const triggerBackgroundInput = () => {
     document.getElementById('backgroundInput')?.click();
@@ -52,39 +68,32 @@ function AppContent() {
         onToggleInfo={() => setIsCollapsibleVisible(!isCollapsibleVisible)}
         onToggleControls={() => setIsLeftCollapsibleVisible(!isLeftCollapsibleVisible)}
         onChangeBackground={triggerBackgroundInput}
+        onToggleAvatarSelector={() => {
+          console.log("Toggle avatar selector, current state:", isAvatarSelectorVisible);
+          setIsAvatarSelectorVisible(!isAvatarSelectorVisible);
+        }}
         isInfoVisible={isCollapsibleVisible}
         isControlsVisible={isLeftCollapsibleVisible}
+        isAvatarSelectorVisible={isAvatarSelectorVisible}
       />
 
       <BackgroundControls isVisible={isLeftCollapsibleVisible} />
 
-      <div className={`collapsible-container ${isCollapsibleVisible ? 'show' : ''}`}>
-        <div id="presentation">
-          <p>Presentation content goes here...</p>
-        </div>
+      <CollapsiblePanel isVisible={isCollapsibleVisible} />
 
-        <div id="status-container" className="status-container">
-          <div className={`status-indicator ${isTracking ? 'active' : ''}`}>
-            {isTracking ? 'Tracking Active' : 'Initializing Tracking...'}
-          </div>
-          <div className={`status-indicator ${isModelLoaded ? 'active' : ''}`}>
-            {isModelLoaded ? 'Model Loaded' : 'Default Model'}
-          </div>
-        </div>
-        <div {...getRootProps({ className: 'dropzone' })}>
-          <p>Drag & drop RPM avatar GLB file here</p>
-        </div>
-        <input className='url' type="text" placeholder="Paste RPM avatar URL" onChange={handleOnChange} />
-      </div>
+      <AvatarSelector 
+        avatars={availableAvatars}
+        currentAvatar={url.split('?')[0]}
+        onSelectAvatar={handleSelectAvatar}
+        isVisible={isAvatarSelectorVisible}
+      />
 
       <VideoPreview />
 
-      <div className="canvas-container">
+      <div className={`canvas-container ${isCollapsibleVisible ? 'shifted' : ''}`}>
         <Canvas camera={{ fov: 25 }} shadows>
           <ambientLight intensity={0.5} />
-          <pointLight position={[10, 10, 10]} color={new Color(1, 1, 0)} intensity={0.5} castShadow />
-          <pointLight position={[-10, 0, 10]} color={new Color(1, 0, 0)} intensity={0.5} castShadow />
-          <pointLight position={[0, 0, 10]} intensity={0.5} castShadow />
+          {/* Luces y demás */}
           <Avatar url={url} />
         </Canvas>
       </div>
@@ -99,9 +108,7 @@ function App() {
     <FaceTrackingProvider>
       <BackgroundProvider>
         <AvatarProvider>
-          <Suspense fallback={<div>Loading...</div>}>
-            <AppLayout />
-          </Suspense>
+          <AppContent />
         </AvatarProvider>
       </BackgroundProvider>
     </FaceTrackingProvider>

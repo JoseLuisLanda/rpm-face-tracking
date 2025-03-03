@@ -1,0 +1,65 @@
+.avatar-selector-container {
+  position: fixed;
+  top: 0;
+  right: -300px; /* Oculto por defecto */
+  width: 300px;
+  height: 100vh;
+  background-color: rgba(30, 30, 30, 0.95);
+  transition: right 0.3s ease-in-out;
+  z-index: 3000; /* Aumenta el z-index para que esté encima de otros componentes */
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+  color: white;
+}
+
+.avatar-selector-container.show {
+  right: 0; /* Esto mueve el contenedor a la vista cuando está visible */
+}
+
+.avatar-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding-top: 10px;
+}
+
+.avatar-item {
+  background-color: rgba(50, 50, 50, 0.5);
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.avatar-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.avatar-item.selected {
+  border-color: #4da6ff;
+}
+
+.avatar-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.avatar-name {
+  padding: 8px;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  font-size: 14px;
+}
+
+h3 {
+  margin-top: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 10px;
+  text-align: center;
+}

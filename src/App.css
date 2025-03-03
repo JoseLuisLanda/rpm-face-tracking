@@ -95,25 +95,113 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-left: 0;
+  transition: margin-left 0.3s ease;
+  position: relative;
+  z-index: 1500;
 }
 
+.canvas-container.shifted {
+  margin-left: 300px; /* Ajusta este valor según el ancho del panel colapsable */
+}
+
+canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block; /* Asegura que el canvas ocupe todo el contenedor */
+}
+
+/* Posiciona el panel izquierdo (collapsible-container) de forma fija en el lado izquierdo */
 .collapsible-container {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: -300px; /* Oculto por defecto */
+  width: 300px;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  transition: left 0.3s ease;
+  z-index: 1000;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
+/* Cuando se muestra, se desplaza hacia la vista */
 .collapsible-container.show {
+  left: 0;
+}
+
+/* Posiciona el panel derecho (avatar-selector-container) de forma fija en el lado derecho */
+.avatar-selector-container {
+  position: fixed;
+  top: 0;
+  right: -300px; /* Oculto por defecto */
+  width: 300px;
+  height: 100%;
+  background-color: rgba(30, 30, 30, 0.95);
+  transition: right 0.3s ease-in-out;
+  z-index: 2001;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+  color: white;
+}
+
+.avatar-selector-container.show {
+  right: 0; /* Esto mueve el contenedor a la vista cuando está visible */
+}
+
+.avatar-list {
   display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding-top: 10px;
+}
+
+.avatar-item {
+  background-color: rgba(50, 50, 50, 0.5);
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.avatar-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.avatar-item.selected {
+  border-color: #4da6ff;
+}
+
+.avatar-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.avatar-name {
+  padding: 8px;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  font-size: 14px;
+}
+
+h3 {
+  margin-top: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 10px;
+  text-align: center;
 }
 
 .button-container {
   position: fixed;
   top: 10px;
-  left: 50%;
   transform: translateX(-50%);
-  z-index: 1000;
+  z-index: 2000; /* Asegúrate de que esté por encima de otros componentes */
   display: flex;
   gap: 10px;
 }

@@ -8,6 +8,7 @@ import AvatarCanvas from '../Avatar/AvatarCanvas';
 const AppLayout: React.FC = () => {
   const [isInfoVisible, setIsInfoVisible] = useState<boolean>(false);
   const [isControlsVisible, setIsControlsVisible] = useState<boolean>(false);
+  const [isAvatarSelectorVisible, setIsAvatarSelectorVisible] = useState<boolean>(false); // Añadir este estado
 
   const triggerBackgroundInput = () => {
     document.getElementById('backgroundInput')?.click();
@@ -19,8 +20,10 @@ const AppLayout: React.FC = () => {
         onToggleInfo={() => setIsInfoVisible(!isInfoVisible)}
         onToggleControls={() => setIsControlsVisible(!isControlsVisible)}
         onChangeBackground={triggerBackgroundInput}
+        onToggleAvatarSelector={() => setIsAvatarSelectorVisible(!isAvatarSelectorVisible)} // Añadir esta prop
         isInfoVisible={isInfoVisible}
         isControlsVisible={isControlsVisible}
+        isAvatarSelectorVisible={isAvatarSelectorVisible} // Añadir esta prop
       />
 
       <BackgroundControls isVisible={isControlsVisible} />

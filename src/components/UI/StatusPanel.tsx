@@ -7,13 +7,8 @@ const StatusPanel: React.FC = () => {
   const { isModelLoaded } = useAvatar();
 
   return (
-    <div id="status-container" className="status-container">
-      <div className={`status-indicator ${isTracking ? 'active' : ''}`}>
-        {isTracking ? 'Tracking Active' : 'Initializing Tracking...'}
-      </div>
-      <div className={`status-indicator ${isModelLoaded ? 'active' : ''}`}>
-        {isModelLoaded ? 'Model Loaded' : 'Default Model'}
-      </div>
+    <div style={{ border: '1px solid white', padding: '10px', marginTop: '10px' }}>
+      <p>Status Panel Content</p>
     </div>
   );
 };

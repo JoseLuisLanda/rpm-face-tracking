@@ -1,0 +1,54 @@
+.action-buttons {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 2000; /* Aumenta el z-index para que esté encima del panel */
+  pointer-events: auto;
+}
+
+.action-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  border: 2px solid white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.action-button:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+  transform: scale(1.05);
+}
+
+.action-button.active {
+  background-color: #4da6ff;
+  box-shadow: 0 0 10px #4da6ff;
+}
+
+.action-button:focus {
+  outline: none;
+}
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 768px) {
+  .action-buttons {
+    top: 10px;
+    right: 10px;
+  }
+  
+  .action-button {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
+}

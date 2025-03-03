@@ -15,6 +15,9 @@ const AvatarInput: React.FC = () => {
         placeholder="Paste RPM avatar URL" 
         onChange={handleUrlChange} 
       />
+      <div style={{ border: '1px solid white', padding: '10px', marginTop: '10px' }}>
+        <p>Avatar Input Content</p>
+      </div>
     </>
   );
 };
